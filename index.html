@@ -420,32 +420,36 @@ button.addEventListener(
 
     } catch (error) {
 
+  console.error("FULL ERROR:", error);
 
-      console.error(
-        "Advertisement Error:",
-        error
-      );
+  result.innerHTML = `
 
+    <b>❌ Connection Error</b>
 
-      result.innerHTML = `
+    <br><br>
 
-        <b>❌ Error</b>
+    Google Apps-এর সঙ্গে
+    যোগাযোগ করা যায়নি।
 
-        <br><br>
+    <br><br>
 
-        Google Apps-এর সঙ্গে
-        যোগাযোগ করা যায়নি।
+    <b>Error name:</b>
+    ${escapeHtml(error.name || "Unknown")}
 
-        <br><br>
+    <br>
 
-        ${escapeHtml(
-          error.message ||
-          "Unknown error"
-        )}
+    <b>Error message:</b>
+    ${escapeHtml(error.message || "Unknown")}
 
-      `;
+    <br><br>
 
-    }
+    <small>
+      Browser console-এ FULL ERROR দেখুন।
+    </small>
+
+  `;
+
+}
 
 
     button.disabled = false;
