@@ -1,296 +1,155 @@
 <!DOCTYPE html>
 <html lang="bn">
-
 <head>
-
   <meta charset="UTF-8">
-
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-  <title>Tower Location</title>
+  <title>RichAds Test</title>
 
   <!-- Telegram Mini App -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+  <!-- RichAds -->
+  <script src="https://richinfo.co/richpartners/telegram/js/tg-ob.js"></script>
 
-  
-          <script src="https://richinfo.co/richpartners/telegram/js/tg-ob.js"></script>
-          <script>
-            window.TelegramAdsController = new TelegramAdsController();
-            window.TelegramAdsController.initialize({
-              pubId: "994979",
-              appId: "8875",
-            });
-          </script>
-
-  
   <style>
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      padding: 20px;
-
+      padding: 30px 20px;
       font-family: Arial, sans-serif;
-
-      background: #ffffff;
-
-      color: #222;
-
+      background: #f5f5f5;
       text-align: center;
     }
 
-    .container {
-      max-width: 420px;
-
-      margin: 100px auto 0;
-
+    .box {
+      max-width: 450px;
+      margin: 50px auto;
       padding: 30px 20px;
-
-      background: #f7f7f7;
-
-      border-radius: 22px;
-
-      box-shadow:
-        0 5px 25px rgba(0,0,0,0.08);
-    }
-
-    .wave {
-      width: 95px;
-      height: 95px;
-
-      margin: 0 auto 20px;
-
-      display: flex;
-
-      align-items: center;
-      justify-content: center;
-
-      background: #2196f3;
-
-      border-radius: 50%;
-
-      font-size: 52px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
     }
 
     h1 {
-      margin: 10px 0;
-
-      font-size: 30px;
+      margin-bottom: 10px;
     }
 
-    .hello {
-      margin: 15px 0 25px;
-
-      font-size: 19px;
-
-      color: #444;
-    }
-
-    .info {
-      background: #ffffff;
-
-      border-radius: 15px;
-
-      padding: 10px 18px;
-
-      text-align: left;
-    }
-
-    .row {
-      padding: 14px 0;
-
-      border-bottom: 1px solid #eeeeee;
-    }
-
-    .row:last-child {
-      border-bottom: none;
-    }
-
-    .label {
-      display: block;
-
-      margin-bottom: 5px;
-
-      font-size: 14px;
-
-      color: #777;
-    }
-
-    .value {
-      font-size: 17px;
-
+    button {
+      width: 100%;
+      padding: 16px;
+      margin-top: 25px;
+      border: none;
+      border-radius: 12px;
+      background: #2196f3;
+      color: white;
+      font-size: 18px;
       font-weight: bold;
+      cursor: pointer;
+    }
 
+    button:disabled {
+      opacity: 0.6;
+    }
+
+    #result {
+      margin-top: 25px;
+      padding: 15px;
+      border-radius: 10px;
+      background: #f1f1f1;
       word-break: break-word;
     }
-
-    .error {
-      color: #d32f2f;
-
-      font-size: 15px;
-
-      margin-top: 20px;
-    }
-
   </style>
-
 </head>
-
 
 <body>
 
+<div class="box">
 
-  <div class="container">
+  <h1>🎁 Advertisement Test</h1>
 
-    <div class="wave">
-      👋
-    </div>
+  <p>
+    নিচের button চাপলে একটি RichAds video advertisement চালু হবে।
+  </p>
 
+  <button id="ad-button">
+    ▶️ Watch Advertisement
+  </button>
 
-    <h1>
-      স্বাগতম!
-    </h1>
-
-
-    <div class="hello" id="hello">
-      User Information Loading...
-    </div>
-
-
-    <div class="info">
-
-      <div class="row">
-
-        <span class="label">
-          নাম
-        </span>
-
-        <span class="value" id="name">
-          Loading...
-        </span>
-
-      </div>
-
-
-      <div class="row">
-
-        <span class="label">
-          Telegram ID
-        </span>
-
-        <span class="value" id="userId">
-          Loading...
-        </span>
-
-      </div>
-
-
-      <div class="row">
-
-        <span class="label">
-          Username
-        </span>
-
-        <span class="value" id="username">
-          Loading...
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <div class="error" id="error"></div>
-
+  <div id="result">
+    এখনো কোনো advertisement চালানো হয়নি।
   </div>
 
+</div>
 
 <script>
 
-  // Telegram WebApp
+  // Telegram Mini App
   const tg = window.Telegram.WebApp;
 
-
-  // Initialize
   tg.ready();
-
-
-  // Expand Mini App
   tg.expand();
 
 
-  // Telegram User
-  const user = tg.initDataUnsafe.user;
+  // ============================
+  // RichAds Controller
+  // ============================
+
+  const richadsController =
+    new window.TelegramAdsController();
 
 
-  if (user) {
-
-    // First + Last Name
-    const firstName = user.first_name || "";
-
-    const lastName = user.last_name || "";
-
-    const fullName =
-      (firstName + " " + lastName).trim();
+  richadsController.initialize({
+    pubId: "994979",
+    appId: "8875",
+    debug: false
+  });
 
 
-    // Welcome message
-    document.getElementById("hello").innerHTML =
-      "হ্যালো, <b>" +
-      fullName +
-      "</b> 👋";
+  // ============================
+  // Advertisement Button
+  // ============================
+
+  const button =
+    document.getElementById("ad-button");
+
+  const result =
+    document.getElementById("result");
 
 
-    // Name
-    document.getElementById("name").textContent =
-      fullName || "নাম পাওয়া যায়নি";
+  button.addEventListener("click", async () => {
 
+    button.disabled = true;
 
-    // Telegram ID
-    document.getElementById("userId").textContent =
-      user.id || "ID পাওয়া যায়নি";
+    result.innerText =
+      "⏳ Advertisement চালু হচ্ছে...";
 
+    try {
 
-    // Username
-    document.getElementById("username").textContent =
-      user.username
-        ? "@" + user.username
-        : "Username নেই";
+      const adResult =
+        await richadsController.triggerInterstitialVideo();
 
-  }
+      console.log("RichAds SUCCESS:", adResult);
 
+      result.innerText =
+        "✅ Advertisement result পাওয়া গেছে:\n\n" +
+        JSON.stringify(adResult);
 
-  else {
+    } catch (error) {
 
-    document.getElementById("hello").textContent =
-      "Telegram User Information পাওয়া যায়নি";
+      console.log("RichAds ERROR:", error);
 
+      result.innerText =
+        "❌ Advertisement result পাওয়া যায়নি:\n\n" +
+        JSON.stringify(error);
 
-    document.getElementById("name").textContent =
-      "---";
+    }
 
+    button.disabled = false;
 
-    document.getElementById("userId").textContent =
-      "---";
-
-
-    document.getElementById("username").textContent =
-      "---";
-
-
-    document.getElementById("error").textContent =
-      "এই পেজটি Telegram Mini App হিসেবে খুলুন।";
-
-  }
+  });
 
 </script>
 
-
 </body>
-
 </html>
