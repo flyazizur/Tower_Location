@@ -126,14 +126,18 @@
 
     try {
 
-      const adResult =
-        await richadsController.triggerInterstitialVideo();
+const adResult =
+  await richadsController.triggerInterstitialVideo();
 
-      console.log("RichAds SUCCESS:", adResult);
+const user = tg.initDataUnsafe?.user;
 
-      result.innerText =
-        "✅ Advertisement result পাওয়া গেছে:\n\n" +
-        JSON.stringify(adResult);
+result.innerHTML = `
+  <b>✅ Advertisement SUCCESS</b><br><br>
+  <b>Telegram User Information</b><br>
+  ID: ${user?.id || "পাওয়া যায়নি"}<br>
+  Name: ${user?.first_name || ""} ${user?.last_name || ""}<br>
+  Username: ${user?.username ? "@" + user.username : "নেই"}
+`;
 
     } catch (error) {
 
