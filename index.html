@@ -2,485 +2,290 @@
 <html lang="bn">
 
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Advertisement</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advertisement Center</title>
 
   <!-- Telegram Mini App -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-  <!-- RichAds -->
+  <!-- RichAds SDK -->
   <script src="https://richinfo.co/richpartners/telegram/js/tg-ob.js"></script>
 
-
   <style>
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
+      padding: 20px 15px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      color: #333;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 24px;
       padding: 25px 20px;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
       text-align: center;
+      margin-bottom: 25px;
     }
 
-    .box {
-      max-width: 450px;
-      margin: 40px auto;
-      padding: 30px 20px;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.08);
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      color: #1a1a1a;
     }
 
-    h1 {
-      margin-bottom: 10px;
+    .header p {
+      margin: 0;
+      font-size: 14px;
+      color: #666;
     }
 
-    p {
-      line-height: 1.6;
+    .ad-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
 
-    button {
+    .btn-ad {
       width: 100%;
-      padding: 16px;
-      margin-top: 20px;
+      padding: 15px;
       border: none;
-      border-radius: 12px;
-      background: #2196f3;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
       color: white;
-      font-size: 18px;
-      font-weight: bold;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.1s ease, opacity 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
-    button:disabled {
+    .btn-ad:active {
+      transform: scale(0.98);
+    }
+
+    .btn-ad:disabled {
       opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    /* বাটন ভিত্তিক কালার স্কিম */
+    .btn-video { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
+    .btn-playable { background: linear-gradient(135deg, #11998e, #38ef7d); }
+    .btn-banner { background: linear-gradient(135deg, #2196f3, #00b0ff); }
+    .btn-push { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
+
+    /* Embedded Banner Container */
+    #embedded-ad-container {
+      margin-top: 20px;
+      min-height: 100px;
+      background: #fafafa;
+      border: 2px dashed #e0e0e0;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
     }
 
     #result {
-      margin-top: 25px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #f1f1f1;
-      line-height: 1.8;
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 14px;
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      line-height: 1.6;
+      font-size: 14px;
       word-break: break-word;
       white-space: pre-line;
+      text-align: center;
     }
-
   </style>
-
 </head>
-
 
 <body>
 
-  <div class="box">
+  <div class="container">
 
-    <h1>🎁 Advertisement</h1>
+    <div class="header">
+      <h1>🎁 Watch Ads & Earn</h1>
+      <p>নিচের যেকোনো অ্যাড দেখলে আপনার অ্যাকাউন্টে ৩ টি ক্রেডিট যোগ হবে।</p>
+    </div>
 
-    <p>
-      নিচের button চাপলে একটি Ads video advertisement চালু হবে।
-      সফল ভাবে ads দেখলে ৩ টি ক্রেডিট দেয়া হবে।
-    </p>
+    <div class="ad-grid">
+      <!-- ১. Interstitial Video -->
+      <button class="btn-ad btn-video" onclick="watchAd('video')">
+        🎬 Watch Interstitial Video (+3)
+      </button>
 
-    <button id="ad-button">
-      ▶️ Watch Advertisement
-    </button>
+      <!-- ২. Playable Ad -->
+      <button class="btn-ad btn-playable" onclick="watchAd('playable')">
+        🎮 Play Playable Ad (+3)
+      </button>
+
+      <!-- ৩. Interstitial Banner -->
+      <button class="btn-ad btn-banner" onclick="watchAd('banner')">
+        🖼️ View Fullscreen Banner (+3)
+      </button>
+
+      <!-- ৪. Push Ad -->
+      <button class="btn-ad btn-push" onclick="watchAd('push')">
+        🔔 Show Push Notification Ad (+3)
+      </button>
+    </div>
+
+    <!-- ৫. Embedded Banner Ads -->
+    <div id="embedded-ad-container">
+      <small style="color: #aaa;">Embedded Banner Loading...</small>
+    </div>
 
     <div id="result">
-      এখনো কোনো advertisement চালানো হয়নি।
+      এখনো কোনো অ্যাড চালানো হয়নি।
     </div>
 
   </div>
 
+  <script>
+    // ============================================================
+    // TELEGRAM INIT
+    // ============================================================
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
 
-<script>
+    const GAS_URL = "https://script.google.com/macros/s/AKfycby5Uvyac9UfbVXCsmQOcJ30auADUP-7nGrtpkmiGlv9NdLMknyVIlPPxiZjK2KXLvWn/exec";
 
+    // ============================================================
+    // RICHADS INIT
+    // ============================================================
+    const richadsController = new window.TelegramAdsController();
+    richadsController.initialize({
+      pubId: "994979",
+      appId: "8875",
+      debug: false
+    });
 
-// ============================================================
-// TELEGRAM
-// ============================================================
-
-const tg = window.Telegram.WebApp;
-
-tg.ready();
-tg.expand();
-
-
-// ============================================================
-// GOOGLE APPS SCRIPT URL
-// ============================================================
-
-const GAS_URL =
-  "https://script.google.com/macros/s/AKfycby5Uvyac9UfbVXCsmQOcJ30auADUP-7nGrtpkmiGlv9NdLMknyVIlPPxiZjK2KXLvWn/exec";
-
-
-// ============================================================
-// RICHADS
-// ============================================================
-
-const richadsController =
-  new window.TelegramAdsController();
-
-richadsController.initialize({
-
-  pubId: "994979",
-
-  appId: "8875",
-
-  debug: true
-
-});
-
-
-// ============================================================
-// HTML ELEMENTS
-// ============================================================
-
-const button =
-  document.getElementById("ad-button");
-
-const result =
-  document.getElementById("result");
-
-
-// ============================================================
-// WATCH AD
-// ============================================================
-
-button.addEventListener(
-  "click",
-
-  async function () {
-
-    button.disabled = true;
-
-    result.innerText =
-      "⏳ Advertisement চালু হচ্ছে...";
-
-
-    try {
-
-
-      // ------------------------------------------------------
-      // SHOW AD
-      // ------------------------------------------------------
-
-      const adResult =
-        await richadsController
-          .triggerInterstitialVideo();
-
-
-      console.log(
-        "RichAds Result:",
-        adResult
-      );
-
-
-      // ------------------------------------------------------
-      // CHECK AD RESULT
-      // ------------------------------------------------------
-
-      if (
-        String(adResult).toLowerCase() !==
-        "success"
-      ) {
-
-        result.innerText =
-          "❌ Advertisement সফল হয়নি।";
-
-        button.disabled = false;
-
-        return;
-
+    // Page load হলে Embedded Banner নিজে নিজেই লোড হবে
+    document.addEventListener("DOMContentLoaded", () => {
+      try {
+        richadsController.renderEmbeddedBanner({
+          containerId: "embedded-ad-container"
+        });
+      } catch (e) {
+        console.error("Embedded Banner Error:", e);
       }
+    });
 
+    // ============================================================
+    // MAIN AD HANDLER (সহজেই সব বাটন থেকে হ্যান্ডেল করার জন্য)
+    // ============================================================
+    async function watchAd(adType) {
+      const resultDiv = document.getElementById("result");
+      const buttons = document.querySelectorAll(".btn-ad");
 
-      // ------------------------------------------------------
-      // AD SUCCESS
-      // ------------------------------------------------------
-
-      result.innerText =
-        "⏳ Advertisement সফল হয়েছে।\n" +
-        "Telegram verification চলছে...";
-
-
-      // ------------------------------------------------------
-      // TELEGRAM INIT DATA
-      // ------------------------------------------------------
-
-      const initData =
-        tg.initData;
-
-
-      if (!initData) {
-
-        result.innerText =
-          "❌ Telegram initData পাওয়া যায়নি।";
-
-        button.disabled = false;
-
-        return;
-
-      }
-
-
-      // ------------------------------------------------------
-      // CREATE POST DATA
-      // ------------------------------------------------------
-
-      const formData =
-        new URLSearchParams();
-
-      formData.append(
-        "initData",
-        initData
-      );
-
-      formData.append(
-        "adResult",
-        "success"
-      );
-
-
-      console.log(
-        "Sending request to GAS..."
-      );
-
-
-      // ------------------------------------------------------
-      // SEND TO GOOGLE APPS SCRIPT
-      // ------------------------------------------------------
-
-      const response =
-        await fetch(
-
-          GAS_URL,
-
-          {
-
-            method: "POST",
-
-            body: formData
-
-          }
-
-        );
-
-
-      // ------------------------------------------------------
-      // CHECK HTTP STATUS
-      // ------------------------------------------------------
-
-      if (!response.ok) {
-
-        throw new Error(
-          "HTTP " +
-          response.status
-        );
-
-      }
-
-
-      // ------------------------------------------------------
-      // READ RESPONSE AS TEXT FIRST
-      // ------------------------------------------------------
-
-      const responseText =
-        await response.text();
-
-
-      console.log(
-        "Raw GAS Response:",
-        responseText
-      );
-
-
-      if (!responseText) {
-
-        throw new Error(
-          "Google Apps Script থেকে empty response এসেছে"
-        );
-
-      }
-
-
-      // ------------------------------------------------------
-      // JSON PARSE
-      // ------------------------------------------------------
-
-      let data;
+      // সেশন চলাকালে সব বাটন ডিজঅ্যাবল করুন
+      buttons.forEach(btn => btn.disabled = true);
+      resultDiv.innerText = "⏳ Advertisement চালু হচ্ছে...";
 
       try {
+        let adResult;
 
-        data =
-          JSON.parse(
-            responseText
-          );
-
-      } catch (jsonError) {
-
-        throw new Error(
-          "GAS valid JSON response দেয়নি"
-        );
-
-      }
-
-
-      console.log(
-        "GAS Response:",
-        data
-      );
-
-
-      // ------------------------------------------------------
-      // SERVER ERROR
-      // ------------------------------------------------------
-
-      if (!data.ok) {
-
-        result.innerHTML = `
-
-          <b>❌ Verification Failed</b>
-
-          <br><br>
-
-          ${escapeHtml(
-            data.error ||
-            "Unknown server error"
-          )}
-
-        `;
-
-        button.disabled = false;
-
-        return;
-
-      }
-
-
-      // ------------------------------------------------------
-      // SUCCESS
-      // ------------------------------------------------------
-
-      result.innerHTML = `
-
-        <b>✅ Advertisement সফল হয়েছে</b>
-
-        <br><br>
-
-        <b>🎁 Reward: +3 Credit</b>
-
-        <br><br>
-
-        <b>Telegram User</b>
-
-        <br><br>
-
-        ID:
-        ${escapeHtml(
-          String(data.user.id)
-        )}
-
-        <br>
-
-        Name:
-        ${escapeHtml(
-          (
-            data.user.first_name ||
-            ""
-          ) +
-          " " +
-          (
-            data.user.last_name ||
-            ""
-          )
-        )}
-
-        <br>
-
-        Username:
-        ${
-          data.user.username
-            ? "@" +
-              escapeHtml(
-                data.user.username
-              )
-            : "নেই"
+        // RichAds-এর নির্দিষ্ট ফরম্যাট ট্রিগার করা
+        if (adType === 'video') {
+          adResult = await richadsController.triggerInterstitialVideo();
+        } else if (adType === 'playable') {
+          adResult = await richadsController.triggerPlayable();
+        } else if (adType === 'banner') {
+          adResult = await richadsController.triggerInterstitialBanner();
+        } else if (adType === 'push') {
+          adResult = await richadsController.triggerPush();
         }
 
-      `;
+        console.log("Ad Result:", adResult);
 
+        // অ্যাড সফল না হলে রিওয়ার্ড ব্যাকএন্ডে রিকোয়েস্ট পাঠাবে না
+        if (String(adResult).toLowerCase() !== "success") {
+          resultDiv.innerText = "❌ Advertisement সফলভাবে সম্পন্ন হয়নি।";
+          buttons.forEach(btn => btn.disabled = false);
+          return;
+        }
 
-    } catch (error) {
+        resultDiv.innerText = "⏳ Advertisement সফল হয়েছে!\nTelegram-এ verification চলছে...";
 
-  console.error("FULL ERROR:", error);
+        // ব্যাকএন্ডে পাঠানোর ডাটা রেডি করা
+        const initData = tg.initData;
+        if (!initData) {
+          resultDiv.innerText = "❌ Telegram initData পাওয়া যায়নি।";
+          buttons.forEach(btn => btn.disabled = false);
+          return;
+        }
 
-  result.innerHTML = `
+        const formData = new URLSearchParams();
+        formData.append("initData", initData);
+        formData.append("adResult", "success");
 
-    <b>❌ Connection Error</b>
+        // Google Apps Script-এ রিকোয়েস্ট পাঠানো
+        const response = await fetch(GAS_URL, {
+          method: "POST",
+          body: formData
+        });
 
-    <br><br>
+        if (!response.ok) throw new Error("HTTP Status: " + response.status);
 
-    Google Apps-এর সঙ্গে
-    যোগাযোগ করা যায়নি।
+        const responseText = await response.text();
+        if (!responseText) throw new Error("Empty response from GAS");
 
-    <br><br>
+        const data = JSON.parse(responseText);
 
-    <b>Error name:</b>
-    ${escapeHtml(error.name || "Unknown")}
+        if (!data.ok) {
+          resultDiv.innerHTML = `<b>❌ Verification Failed</b><br><br>${escapeHtml(data.error || "Server error")}`;
+        } else {
+          resultDiv.innerHTML = `
+            <b>✅ Advertisement সফল হয়েছে!</b><br><br>
+            <b>🎁 Reward: +3 Credit added</b><br><br>
+            <b>Telegram User:</b><br>
+            ID: ${escapeHtml(String(data.user.id))}<br>
+            Name: ${escapeHtml((data.user.first_name || "") + " " + (data.user.last_name || ""))}<br>
+            Username: ${data.user.username ? "@" + escapeHtml(data.user.username) : "নেই"}
+          `;
+        }
 
-    <br>
+      } catch (error) {
+        console.error("FULL ERROR:", error);
+        resultDiv.innerHTML = `
+          <b>❌ Connection Error</b><br><br>
+          Google Apps Server-এর সঙ্গে যোগাযোগে ব্যর্থ।<br><br>
+          <small><b>Error:</b> ${escapeHtml(error.message || "Unknown error")}</small>
+        `;
+      }
 
-    <b>Error message:</b>
-    ${escapeHtml(error.message || "Unknown")}
+      buttons.forEach(btn => btn.disabled = false);
+    }
 
-    <br><br>
-
-    <small>
-      Browser console-এ FULL ERROR দেখুন।
-    </small>
-
-  `;
-
-}
-
-
-    button.disabled = false;
-
-  }
-
-);
-
-
-// ============================================================
-// BASIC HTML ESCAPE
-// ============================================================
-
-function escapeHtml(value) {
-
-  return String(value)
-
-    .replaceAll("&", "&amp;")
-
-    .replaceAll("<", "&lt;")
-
-    .replaceAll(">", "&gt;")
-
-    .replaceAll('"', "&quot;")
-
-    .replaceAll("'", "&#039;");
-
-}
-
-
-</script>
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+  </script>
 
 </body>
+
 </html>
